@@ -6,12 +6,13 @@ El repositorio contiene la configuración de OpenSpec. El archivo adjunto descri
 
 ## Goals / Non-Goals
 
-El diseño debe permitir distribuir un HTML autocontenido, probarlo sin conexión y recuperar una sesión mediante archivos. El prototipo usa una única vista interna y agentes de demostración. La identidad verificada, la auditoría a prueba de alteraciones y la coordinación entre dispositivos corresponden a un despliegue posterior.
+El diseño debe permitir distribuir un HTML autocontenido, probarlo sin conexión y recuperar una sesión mediante archivos. El selector simula perfiles dentro de la sesión local. La identidad verificada, la auditoría a prueba de alteraciones y la coordinación entre dispositivos corresponden a un despliegue posterior.
 
 ## Decisions
 
 - **Distribución.** `aurora.html` integra HTML5, CSS3 y JavaScript sin bibliotecas ni peticiones de red. La aplicación usa controles nativos del navegador para leer archivos seleccionados y descargar los respaldos.
-- **Vista.** Un formulario de radicación, una bandeja y un panel de detalle e historial comparten la misma página. En pantallas estrechas se apilan. Los estados de plazo combinan texto y color, y los mensajes de error se asocian a los campos correspondientes.
+- **Vistas por perfil.** El formulario, la bandeja y el detalle comparten la misma página. Al elegir Agente, el agente activo delimita el conjunto de casos antes de aplicar la búsqueda o los filtros. La selección se invalida si el detalle abierto deja de pertenecer a la vista. Coordinador inicia con la bandeja completa y puede aplicar los filtros de consulta.
+- **Gráfico de plazos.** Construir las barras con HTML y CSS, sin bibliotecas ni conexión. Calcular las cantidades a partir de todos los casos abiertos, independientemente de los filtros de la bandeja. Usar horas sin redondear en los cortes de 12, 24, 26 y 48, y mostrar los rangos y conteos como texto. Actualizar la distribución con el mismo reloj que las alertas y al cambiar el conjunto de casos.
 - **Modelo en memoria.** Objetos y arreglos representan clientes, agentes, tickets y eventos. Las altas válidas actualizan el ticket, el turno y el historial en una sola operación. Los tipos de solicitud son consulta de stock, estado de pedido, inconformidad de envío, facturación o cobro y devolución. Se conserva la razón social que tenía el ticket al radicarse, aunque se actualice el directorio.
 - **Identificadores y reloj.** Guardar fechas en ISO 8601 usando el reloj del dispositivo, mostrar la hora en `America/Bogota` y usar esa zona para el mes del ticket. La secuencia mensual de cuatro dígitos continúa tras restaurar. Si se agota el rango mensual, la aplicación informa el límite y conserva los datos. Calcular el SLA comparando instantes sin redondear y actualizar el semáforo mientras la página esté activa y al volver a ella.
 - **Estados e historial.** Los casos abiertos pueden pasar a En proceso, Pendiente logística, Pendiente ventas o Resuelto. Resuelto puede pasar a Cerrado. La resolución requiere una respuesta y fija por escrito el cumplimiento. Los eventos se agregan cronológicamente y se muestran sin controles de edición.

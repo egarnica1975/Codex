@@ -2,15 +2,16 @@
 
 ## Why
 
-La especificación de Comercial Aurora estima que se pierden 60 de unas 600 solicitudes mensuales y que el 30 % queda sin responsable. Un prototipo local permitirá comprobar si una bandeja única, la asignación automática y las alertas visuales ayudan al equipo a dar seguimiento a los casos antes de invertir en un sistema compartido.
+La especificación de Comercial Aurora estima que se pierden 60 de unas 600 solicitudes mensuales y que el 30 % queda sin responsable. Un prototipo local permitirá comprobar si la asignación automática, las vistas por perfil y las alertas visuales ayudan al equipo a dar seguimiento a los casos antes de invertir en un sistema compartido.
 
 ## What Changes
 
 - Entregar un único archivo HTML en español, con CSS y JavaScript integrados, que se pueda abrir con doble clic y probar sin conexión en un navegador instalado.
 - Permitir radicar solicitudes recibidas por llamada, correo o mensajería, buscar al cliente por NIT o razón social, generar un identificador y asignar un responsable entre cuatro agentes ficticios por rotación.
-- Reunir en una sola vista el formulario, una bandeja con búsqueda y filtros y el detalle con los cambios de estado y su historial. Mostrar avisos visuales a las 24 horas y vencimientos a las 48 horas corridas. Registrar el cumplimiento del plazo al resolver.
+- Reunir en una sola página el formulario, la bandeja y el historial. Simular las vistas de agente y coordinador con un selector de perfil. Cada agente consulta sus casos y el coordinador consulta la bandeja completa, con avisos a las 24 horas y vencimientos a las 48 horas corridas.
+- Mostrar en la vista de coordinador cuatro barras de distribución por antigüedad, con cortes de 12, 24, 26 y 48 horas, y un contador de casos abiertos vencidos. Registrar el cumplimiento del plazo al resolver.
 - Incluir solicitudes y clientes ficticios desde el inicio. Cargar un directorio adicional en JSON y exportar o recuperar la sesión completa en un archivo JSON.
-- Considerar el prototipo aceptado cuando se pueda abrir el HTML, radicar y resolver un caso, comprobar los dos niveles de alerta con ejemplos, y recuperar la sesión en el navegador a partir del archivo exportado.
+- Considerar el prototipo aceptado cuando se pueda abrir el HTML, radicar y resolver un caso, alternar entre los dos perfiles, comprobar las alertas y el gráfico con ejemplos, y recuperar la sesión a partir del archivo exportado.
 
 ## Capabilities
 
