@@ -99,6 +99,9 @@
     .page-heading { padding: 24px 0 20px; }
     h1 { font-size: clamp(1.85rem, 3vw, 2.45rem); letter-spacing: -.045em; line-height: 1.12; }
     .subtitle { margin-top: 8px; font-size: .93rem; color: var(--sub); line-height: 1.45; }
+    .heading-row { display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+    .profile-controls { display: flex; flex-wrap: wrap; gap: 8px; }
+    .profile-field { display: grid; gap: 4px; min-width: 118px; }
     h2 { font-size: 1.11rem; letter-spacing: -.017em; }
     h3 { font-size: 1rem; }
     .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; margin-bottom: 21px; }
@@ -116,6 +119,25 @@
     .card { border: 1px solid var(--line); border-radius: 11px; background: var(--white); box-shadow: var(--shadow); min-width: 0; scroll-margin-top: 12px; }
     .card-heading { padding: 17px 18px 13px; }
     .card-heading .subtitle { margin-top: 4px; font-size: .81rem; }
+    .deadline-chart { margin-bottom: 17px; }
+    .deadline-bars {
+      list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
+      margin: 0; padding: 0 18px 15px;
+    }
+    .deadline-bars li {
+      display: grid; grid-template-rows: auto 48px auto; justify-items: center;
+      gap: 5px; min-width: 0; text-align: center;
+    }
+    .deadline-value { font-size: .91rem; font-variant-numeric: tabular-nums; }
+    .deadline-track {
+      align-self: stretch; display: flex; align-items: end; justify-content: center;
+      width: 100%; border-bottom: 1px solid var(--line); background: #f5f7fa; border-radius: 5px 5px 0 0;
+    }
+    .deadline-fill { width: clamp(14px, 45%, 90px); height: 0; border-radius: 4px 4px 0 0; }
+    .deadline-bars li:nth-child(1) .deadline-fill { background: #21835e; }
+    .deadline-bars li:nth-child(2) .deadline-fill { background: #dbad20; }
+    .deadline-bars li:nth-child(3) .deadline-fill { background: #e38434; }
+    .deadline-bars li:nth-child(4) .deadline-fill { background: #ba3d49; }
     .form-body { padding: 0 18px 17px; }
     .field { display: grid; gap: 5px; margin-bottom: 12px; min-width: 0; }
     label, .field-title { font-weight: 650; color: #263b51; font-size: .82rem; }
@@ -228,15 +250,39 @@
           <button class="button" id="export-button" type="button">↓ Exportar respaldo</button>
         </div>
       </header>
-      <div class="page-heading">
-        <h1>Solicitudes de servicio</h1>
-        <p class="subtitle">Registra, asigna y da seguimiento a las solicitudes de tus clientes.</p>
+      <div class="page-heading heading-row">
+        <div>
+          <h1>Solicitudes de servicio</h1>
+          <p class="subtitle">Registra, asigna y da seguimiento a las solicitudes de tus clientes.</p>
+        </div>
+        <div class="profile-controls" role="group" aria-label="Perfiles simulados">
+          <div class="profile-field">
+            <label for="profile">Perfil</label>
+            <select id="profile"><option value="coordinator">Coordinador</option><option value="agent">Agente</option></select>
+          </div>
+          <div class="profile-field" id="active-agent-field" hidden>
+            <label for="active-agent">Agente activo</label>
+            <select id="active-agent"></select>
+          </div>
+        </div>
       </div>
       <section class="metrics" aria-label="Resumen de solicitudes">
         <div class="metric"><span class="metric-icon blue" aria-hidden="true">▤</span><div><strong id="count-total">0</strong><span>Total registradas</span></div></div>
         <div class="metric"><span class="metric-icon green" aria-hidden="true">✓</span><div><strong id="count-ok">0</strong><span>En plazo</span></div></div>
         <div class="metric"><span class="metric-icon amber" aria-hidden="true">◷</span><div><strong id="count-attention">0</strong><span>Atención · 24 h</span></div></div>
         <div class="metric"><span class="metric-icon red" aria-hidden="true">!</span><div><strong id="count-late">0</strong><span>Vencidas · 48 h</span></div></div>
+      </section>
+      <section class="card deadline-chart" id="deadline-chart" aria-labelledby="deadline-chart-title">
+        <div class="card-heading">
+          <h2 id="deadline-chart-title">Distribución de plazos</h2>
+          <p class="subtitle">Solicitudes abiertas con menos de 48 horas desde la recepción.</p>
+        </div>
+        <ul class="deadline-bars">
+          <li><strong class="deadline-value">0</strong><span class="deadline-track" aria-hidden="true"><span class="deadline-fill"></span></span><span class="muted">0 a &lt;12 h</span></li>
+          <li><strong class="deadline-value">0</strong><span class="deadline-track" aria-hidden="true"><span class="deadline-fill"></span></span><span class="muted">12 a &lt;24 h</span></li>
+          <li><strong class="deadline-value">0</strong><span class="deadline-track" aria-hidden="true"><span class="deadline-fill"></span></span><span class="muted">24 a &lt;26 h</span></li>
+          <li><strong class="deadline-value">0</strong><span class="deadline-track" aria-hidden="true"><span class="deadline-fill"></span></span><span class="muted">26 a &lt;48 h</span></li>
+        </ul>
       </section>
       <div class="workspace">
         <section class="card" id="radicacion" aria-labelledby="new-heading">
@@ -274,7 +320,7 @@
         </section>
         <div class="right-column">
           <section class="card" id="bandeja" aria-labelledby="queue-heading">
-            <div class="card-heading"><h2 id="queue-heading">Bandeja de solicitudes</h2><p class="subtitle">Busca un caso y abre su ticket para ver el historial.</p></div>
+            <div class="card-heading"><h2 id="queue-heading">Bandeja de solicitudes</h2><p class="subtitle" id="queue-description">Busca un caso y abre su ticket para ver el historial.</p></div>
             <div class="filters">
               <input id="query" type="search" aria-label="Buscar solicitudes" placeholder="Ticket, NIT o razón social">
               <select id="status-filter" aria-label="Filtrar por estado"><option value="">Todos los estados</option></select>
@@ -358,6 +404,10 @@
     ];
     const OPEN_TARGETS = ["En_Proceso", "Pendiente_Logistica", "Pendiente_Ventas", "Resuelto"];
     const LEVELS = { ok: "En plazo", attention: "Atención", late: "Vencida" };
+    const DEADLINE_CUTS = [12, 24, 26, 48];
+    const deadlineBars = Array.from(document.querySelectorAll(".deadline-bars li"), (bar) => ({
+      value: bar.querySelector(".deadline-value"), fill: bar.querySelector(".deadline-fill")
+    }));
     const EXAMPLE_CLIENTS = [
       { nit: "901555020-1", razonSocial: "Oficinas Sendero (ficticio)" },
       { nit: "901555021-9", razonSocial: "Colegio Nuevo Río (ficticio)" }
@@ -448,9 +498,9 @@
       };
       const demo = [
         [60, 3, "Mensajeria", "Inconformidad_Envio", "El cliente reporta unidades faltantes en la entrega.", "Pendiente_Logistica", "Se solicitó confirmación de inventario."],
-        [53, 4, "Llamada_Telefonica", "Devolucion", "El cliente solicita recoger una caja con referencias equivocadas.", "Pendiente_Ventas", "Se solicitó autorización para la devolución."],
         [42, 5, "Correo_Electronico", "Facturacion_Cobro", "Solicita una copia de la factura con el detalle del pedido.", "Resuelto", "Se envió una copia de la factura al correo de contacto."],
         [29, 2, "Correo_Electronico", "Estado_Pedido", "La papelería solicita confirmar la fecha estimada de entrega.", "En_Proceso", "Se está verificando el despacho."],
+        [25, 4, "Llamada_Telefonica", "Devolucion", "El cliente solicita recoger una caja con referencias equivocadas.", "Pendiente_Ventas", "Se solicitó autorización para la devolución."],
         [17, 1, "Mensajeria", "Consulta_Stock", "El colegio consulta disponibilidad de resmas y marcadores.", "En_Proceso", "Se revisa el inventario disponible."],
         [3, 0, "Llamada_Telefonica", "Estado_Pedido", "Solicita confirmar la entrega del pedido de insumos de oficina.", null, ""]
       ];
@@ -537,9 +587,42 @@
     function renderAgents() {
       const select = get("agent-filter");
       const previous = select.value;
+      const active = get("active-agent");
+      const activeId = active.value;
       setChildren(select, [new Option("Todos los agentes", "")]);
-      for (const agent of session.agentes) addOption(select, agent.id, agent.nombre);
+      setChildren(active);
+      for (const agent of session.agentes) {
+        addOption(select, agent.id, agent.nombre);
+        addOption(active, agent.id, agent.nombre);
+      }
       if (session.agentes.some(({ id }) => id === previous)) select.value = previous;
+      if (session.agentes.some(({ id }) => id === activeId)) active.value = activeId;
+    }
+
+    function agentView() {
+      return get("profile").value === "agent";
+    }
+
+    function ticketInScope(ticket) {
+      return !agentView() || ticket.agenteId === get("active-agent").value;
+    }
+
+    function resetQueueFilters() {
+      for (const id of ["query", "status-filter", "agent-filter", "deadline-filter"]) get(id).value = "";
+    }
+
+    function changeView() {
+      const isAgent = agentView();
+      get("active-agent-field").hidden = !isAgent;
+      get("agent-filter").hidden = isAgent;
+      get("deadline-chart").hidden = isAgent;
+      get("queue-description").textContent = isAgent
+        ? "Solicitudes asignadas a " + agentName(get("active-agent").value) + "."
+        : "Busca un caso y abre su ticket para ver el historial.";
+      resetQueueFilters();
+      if (!currentTicket()) selectedId = null;
+      renderQueue();
+      renderDetail();
     }
 
     function agentName(id) {
@@ -573,19 +656,40 @@
       return dateFormat.format(new Date(value));
     }
 
+    function renderDeadlineChart(counts) {
+      const scale = Math.max(1, ...counts);
+      for (const [index, count] of counts.entries()) {
+        const bar = deadlineBars[index];
+        const label = String(count);
+        const height = count / scale * 100 + "%";
+        if (bar.value.textContent !== label) bar.value.textContent = label;
+        if (bar.fill.style.height !== height) bar.fill.style.height = height;
+      }
+    }
+
     function renderQueue(force = true, now = Date.now()) {
       const query = searchKey(get("query").value);
       const state = get("status-filter").value;
       const agent = get("agent-filter").value;
       const level = get("deadline-filter").value;
       const totals = { ok: 0, attention: 0, late: 0, finished: 0 };
+      const showChart = !agentView();
+      const chartCounts = DEADLINE_CUTS.map(() => 0);
       const filtered = [];
+      let scopedTotal = 0;
       for (const ticket of [...session.solicitudes].reverse()) {
+        if (!ticketInScope(ticket)) continue;
+        scopedTotal += 1;
         const timing = deadline(ticket, now);
         totals[timing.level] += 1;
+        if (showChart && (timing.level === "ok" || timing.level === "attention")) {
+          const bucket = DEADLINE_CUTS.findIndex((cut) => timing.hours < cut);
+          chartCounts[bucket] += 1;
+        }
         if (state && ticket.estado !== state || agent && ticket.agenteId !== agent || level && timing.level !== level) continue;
         if (matches(query, ticket.id, ticket.clienteNit, ticket.clienteNombre)) filtered.push({ ticket, timing });
       }
+      if (showChart) renderDeadlineChart(chartCounts);
       const queueKey = filtered.map(({ ticket, timing }) => ticket.id + timing.level);
       if (!force && queueKey.length === renderedQueue.length && queueKey.every((value, index) => value === renderedQueue[index])) {
         if (get("count-ok").textContent === String(totals.ok) &&
@@ -593,12 +697,12 @@
             get("count-late").textContent === String(totals.late)) return;
       }
       renderedQueue = queueKey;
-      get("count-total").textContent = session.solicitudes.length;
+      get("count-total").textContent = scopedTotal;
       get("count-ok").textContent = totals.ok;
       get("count-attention").textContent = totals.attention;
       get("count-late").textContent = totals.late;
       get("empty-queue").hidden = filtered.length > 0;
-      get("ticket-count").textContent = filtered.length + " de " + session.solicitudes.length + " solicitudes";
+      get("ticket-count").textContent = filtered.length + " de " + scopedTotal + " solicitudes";
       const focusedTicket = document.activeElement?.dataset.ticketId;
       const tbody = get("ticket-rows");
       setChildren(tbody, filtered.map(({ ticket, timing }) => {
@@ -630,7 +734,7 @@
     }
 
     function currentTicket() {
-      return session.solicitudes.find((ticket) => ticket.id === selectedId);
+      return session.solicitudes.find((ticket) => ticket.id === selectedId && ticketInScope(ticket));
     }
 
     function detailField(label, value, id) {
@@ -654,7 +758,13 @@
       get("detail-empty").hidden = Boolean(ticket);
       get("detail-body").hidden = !ticket;
       get("detail-heading").textContent = ticket ? ticket.id : "Detalle e historial";
-      if (!ticket) return;
+      if (!ticket) {
+        setChildren(get("detail-info"));
+        setChildren(get("history"));
+        get("detail-description").textContent = "";
+        get("comment").value = "";
+        return;
+      }
       const info = get("detail-info");
       setChildren(info, [
         detailField("Cliente", ticket.clienteNombre + " · " + ticket.clienteNit),
@@ -711,7 +821,7 @@
       }
       event.currentTarget.reset();
       renderClients();
-      selectedId = ticket.id;
+      if (ticketInScope(ticket)) selectedId = ticket.id;
       renderQueue();
       renderDetail();
       markDirty();
@@ -752,6 +862,8 @@
       get(id).addEventListener(id === "query" ? "input" : "change", () => renderQueue());
     }
     get("client-search").addEventListener("input", renderClients);
+    get("profile").addEventListener("change", changeView);
+    get("active-agent").addEventListener("change", changeView);
 
     function refreshClock() {
       const now = Date.now();
@@ -962,11 +1074,9 @@
         selectedId = last(session.solicitudes)?.id ?? null;
         get("ticket-form").reset();
         for (const id of ["client", "channel", "type", "description"]) fieldError(id);
-        for (const id of ["query", "status-filter", "agent-filter", "deadline-filter"]) get(id).value = "";
         renderClients();
         renderAgents();
-        renderQueue();
-        renderDetail();
+        changeView();
         dirty = false;
         lastBackup = "Respaldo restaurado";
         updateSaveState();
@@ -981,8 +1091,7 @@
     get("directory-example").textContent = JSON.stringify(EXAMPLE_CLIENTS, null, 2);
     renderClients();
     renderAgents();
-    renderQueue();
-    renderDetail();
+    changeView();
     updateSaveState();
   </script>
 </body>

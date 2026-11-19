@@ -22,6 +22,6 @@
 
 ## 5. Perfiles simulados y gráfico de plazos
 
-- [ ] 5.1 Incorporar los selectores de perfil y agente. Verificar que cada agente puede consultar solo sus casos, que al cambiar de perfil se retira un detalle fuera de alcance y que el coordinador recupera la bandeja completa con las alertas de 24 y 48 horas.
-- [ ] 5.2 Incorporar el gráfico de cuatro barras y el contador de vencidas para el coordinador. Probar con un reloj controlado los límites exactos de 12, 24, 26 y 48 horas, las barras vacías y la exclusión de solicitudes resueltas y cerradas.
-- [ ] 5.3 Probar la nueva interacción con el archivo HTML local en tamaños de escritorio y móvil. Verificar el cambio de perfil, la lectura de rangos y cantidades y la actualización del gráfico al resolver o restaurar solicitudes.
+- [x] 5.1 Incorporar los selectores de perfil y agente. Verificar que cada agente puede consultar solo sus casos, que al cambiar de perfil se retira un detalle fuera de alcance y que el coordinador recupera la bandeja completa con las alertas de 24 y 48 horas.
+- [x] 5.2 Incorporar el gráfico de cuatro barras y el contador de vencidas para el coordinador. Probar con un reloj controlado los límites exactos de 12, 24, 26 y 48 horas, las barras vacías y la exclusión de solicitudes resueltas y cerradas.
+- [x] 5.3 Probar la nueva interacción con el archivo HTML local en tamaños de escritorio y móvil. Verificar el cambio de perfil, la lectura de rangos y cantidades y la actualización del gráfico al resolver o restaurar solicitudes.
