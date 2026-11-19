@@ -1,0 +1,989 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Solicitudes | Comercial Aurora</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #15273b;
+      --ink: #172a3e;
+      --sub: #526276;
+      --line: #dce4eb;
+      --page: #f3f6fa;
+      --white: #fff;
+      --blue: #1851ac;
+      --blue-dark: #123e86;
+      --blue-pale: #eaf1fc;
+      --green: #176044;
+      --green-pale: #e7f5ee;
+      --amber: #875204;
+      --amber-pale: #fff1d6;
+      --red: #a32835;
+      --red-pale: #fcebed;
+      --shadow: 0 2px 6px #182b4009;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 15px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--page); color: var(--ink); }
+    button, input, select, textarea { font: inherit; }
+    button, a { touch-action: manipulation; }
+    button { cursor: pointer; }
+    button:disabled { cursor: default; opacity: .55; }
+    :focus-visible { outline: 3px solid #3183df; outline-offset: 3px; }
+    a { color: var(--blue); }
+    h1, h2, h3, p { margin: 0; }
+    [hidden] { display: none !important; }
+    .layout { display: grid; grid-template-columns: 218px minmax(0, 1fr); min-height: 100vh; }
+    .sidebar {
+      background: var(--navy);
+      color: #eaf1f8;
+      display: flex;
+      flex-direction: column;
+      padding: 27px 17px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 0 8px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 39px;
+      height: 39px;
+      border-radius: 11px;
+      color: #172a3e;
+      background: #ffbb68;
+      flex: none;
+      font-weight: 850;
+      font-size: 24px;
+      line-height: 1;
+    }
+    .brand strong, .brand small { display: block; }
+    .brand small { margin-top: 3px; color: #aebfd0; font-size: .77rem; }
+    .sidebar nav { display: grid; gap: 5px; margin-top: 43px; }
+    .sidebar nav a {
+      display: flex;
+      gap: 11px;
+      align-items: center;
+      padding: 11px 12px;
+      border-radius: 8px;
+      color: #d7e4f0;
+      text-decoration: none;
+      font-weight: 650;
+      font-size: .89rem;
+    }
+    .sidebar nav a:hover, .sidebar nav a:focus-visible { background: #253f59; }
+    .sidebar nav a:first-child { background: #284665; color: #fff; }
+    .nav-icon { width: 17px; text-align: center; }
+    .sidebar-footer { margin-top: auto; padding: 16px 9px 0; border-top: 1px solid #3b4b60; }
+    .sidebar-footer strong { font-size: .85rem; }
+    .sidebar-footer p { color: #b9cadb; font-size: .77rem; line-height: 1.45; margin-top: 6px; }
+    .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #78d4a9; margin-right: 6px; }
+    main { width: 100%; max-width: 1590px; margin: 0 auto; padding: 27px 30px 38px; min-width: 0; }
+    .top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 13px; padding-bottom: 19px; border-bottom: 1px solid var(--line); }
+    .top-label { color: var(--sub); font-weight: 650; font-size: .86rem; }
+    .top-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .save-state { color: var(--sub); font-size: .8rem; margin-right: 3px; }
+    .save-state[data-dirty="true"] { color: var(--amber); font-weight: 700; }
+    .button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      min-height: 37px; padding: 7px 12px; border: 1px solid #c9d5e3; border-radius: 7px;
+      background: var(--white); color: var(--ink); font-weight: 650; font-size: .85rem;
+    }
+    .button:hover { background: #f2f6fc; border-color: #a6bbd4; }
+    .button.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .button.primary:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+    .page-heading { padding: 24px 0 20px; }
+    h1 { font-size: clamp(1.85rem, 3vw, 2.45rem); letter-spacing: -.045em; line-height: 1.12; }
+    .subtitle { margin-top: 8px; font-size: .93rem; color: var(--sub); line-height: 1.45; }
+    h2 { font-size: 1.11rem; letter-spacing: -.017em; }
+    h3 { font-size: 1rem; }
+    .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; margin-bottom: 21px; }
+    .metric { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 15px; border: 1px solid var(--line); border-radius: 10px; background: var(--white); box-shadow: var(--shadow); }
+    .metric-icon { width: 37px; height: 37px; border-radius: 9px; display: grid; place-items: center; flex: none; font-size: 1.16rem; font-weight: 700; }
+    .metric-icon.blue { color: var(--blue); background: var(--blue-pale); }
+    .metric-icon.green { color: var(--green); background: var(--green-pale); }
+    .metric-icon.amber { color: var(--amber); background: var(--amber-pale); }
+    .metric-icon.red { color: var(--red); background: var(--red-pale); }
+    .metric strong, .metric span:last-child { display: block; }
+    .metric strong { font-size: 1.45rem; line-height: 1.05; }
+    .metric div span { margin-top: 4px; color: var(--sub); font-size: .77rem; }
+    .workspace { display: grid; grid-template-columns: minmax(265px, .92fr) minmax(0, 2.1fr); gap: 17px; align-items: start; }
+    .right-column { display: grid; gap: 17px; min-width: 0; }
+    .card { border: 1px solid var(--line); border-radius: 11px; background: var(--white); box-shadow: var(--shadow); min-width: 0; scroll-margin-top: 12px; }
+    .card-heading { padding: 17px 18px 13px; }
+    .card-heading .subtitle { margin-top: 4px; font-size: .81rem; }
+    .form-body { padding: 0 18px 17px; }
+    .field { display: grid; gap: 5px; margin-bottom: 12px; min-width: 0; }
+    label, .field-title { font-weight: 650; color: #263b51; font-size: .82rem; }
+    input, select, textarea {
+      color: var(--ink); background: var(--white); border: 1px solid #c8d4e2; border-radius: 7px;
+      padding: 8px 9px; width: 100%; min-width: 0; min-height: 36px; font-size: .88rem;
+    }
+    input::placeholder, textarea::placeholder { color: #64758a; }
+    textarea { resize: vertical; min-height: 68px; }
+    .two-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .field-error { color: var(--red); font-size: .76rem; }
+    [aria-invalid="true"] { border-color: var(--red); }
+    .muted { font-size: .77rem; color: var(--sub); line-height: 1.45; }
+    .full { width: 100%; }
+    .form-foot { margin-top: 8px; text-align: center; }
+    .filters { display: grid; grid-template-columns: minmax(140px, 1.6fr) repeat(3, minmax(0, 1fr)); gap: 7px; padding: 0 18px 13px; }
+    .filters input, .filters select { font-size: .79rem; }
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; text-align: left; font-size: .83rem; }
+    th { font-size: .74rem; color: #455a70; background: #f4f7fb; font-weight: 750; white-space: nowrap; }
+    th, td { padding: 10px 8px; border-top: 1px solid #e6ecf2; vertical-align: middle; }
+    th:first-child, td:first-child { padding-left: 18px; }
+    th:last-child, td:last-child { padding-right: 18px; }
+    tbody tr[data-selected="true"] { background: #eef4fd; }
+    tbody tr:hover { background: #f5f8fc; }
+    .ticket-link { display: inline-block; padding: 2px 0; background: transparent; border: 0; color: var(--blue); font-weight: 750; white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; }
+    td .muted { display: block; font-size: .73rem; margin-top: 3px; }
+    .customer { min-width: 106px; overflow-wrap: anywhere; }
+    .assignee { white-space: nowrap; }
+    .badge { font-size: .71rem; font-weight: 720; border-radius: 999px; padding: 4px 7px; display: inline-block; line-height: 1.25; background: #eaf0f6; color: #394e63; }
+    .badge[data-level="ok"] { background: var(--green-pale); color: var(--green); }
+    .badge[data-level="attention"] { background: var(--amber-pale); color: var(--amber); }
+    .badge[data-level="late"] { background: var(--red-pale); color: var(--red); }
+    .badge[data-level="finished"] { background: var(--blue-pale); color: #234f8a; }
+    .table-footer { padding: 11px 18px; border-top: 1px solid var(--line); }
+    .empty { padding: 15px 18px; color: var(--sub); font-size: .86rem; }
+    .details { padding: 0 18px 17px; overflow-wrap: anywhere; }
+    .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 19px; }
+    .detail-info { display: grid; gap: 7px; margin: 0; }
+    .detail-info div { display: grid; grid-template-columns: minmax(90px, .55fr) 1fr; gap: 5px; font-size: .83rem; }
+    dt { color: var(--sub); }
+    dd { margin: 0; font-weight: 640; }
+    .detail-description { margin-top: 13px; line-height: 1.5; font-size: .86rem; white-space: pre-wrap; }
+    .timeline { list-style: none; margin: 9px 0 0; padding: 0 0 0 12px; border-left: 2px solid #d6e4f6; }
+    .timeline li { margin-bottom: 10px; font-size: .83rem; }
+    .timeline p { margin-top: 3px; white-space: pre-wrap; }
+    .transition { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .data-card .card-heading { padding-bottom: 12px; }
+    .data-body { padding: 0 18px 16px; }
+    .data-body details { margin-top: 10px; }
+    summary { cursor: pointer; color: var(--blue); font-weight: 650; font-size: .86rem; }
+    pre { white-space: pre-wrap; background: var(--page); padding: 10px; border-radius: 7px; font-size: .8rem; }
+    .notice { position: fixed; right: 22px; bottom: 20px; z-index: 2; padding: 12px 14px; border-radius: 8px; color: #fff; background: #183c5b; box-shadow: 0 4px 15px #15273b45; max-width: min(440px, calc(100% - 44px)); font-size: .9rem; }
+    .notice[data-error="true"] { background: #8e2332; }
+    dialog { border: 1px solid #cdd9e6; border-radius: 12px; max-width: min(420px, calc(100% - 32px)); color: var(--ink); padding: 20px; }
+    dialog::backdrop { background: #13283e70; }
+    dialog p { margin: 10px 0 16px; line-height: 1.5; color: var(--sub); font-size: .9rem; }
+    dialog form { display: flex; justify-content: flex-end; gap: 8px; }
+    .sr-only, .skip:not(:focus) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .skip:focus { position: fixed; top: 8px; left: 8px; z-index: 5; padding: 8px; background: #fff; }
+    @media (max-width: 1110px) {
+      .layout { grid-template-columns: 177px minmax(0, 1fr); }
+      main { padding-inline: 20px; }
+      .workspace { grid-template-columns: minmax(230px, .8fr) minmax(0, 1.6fr); }
+      .filters { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 910px) {
+      .workspace { grid-template-columns: 1fr; }
+      .filters { grid-template-columns: minmax(100px, 1.5fr) repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 680px) {
+      .layout { display: block; }
+      .sidebar { position: static; height: auto; padding: 12px; gap: 10px; }
+      .sidebar nav { margin-top: 0; display: flex; flex-wrap: wrap; }
+      .sidebar nav a { padding: 7px 8px; font-size: .8rem; }
+      .sidebar-footer { display: none; }
+      main { padding: 14px 12px 26px; }
+      .top { gap: 9px; padding-bottom: 13px; }
+      .page-heading { padding: 16px 0; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin-bottom: 14px; }
+      .metric { padding: 9px; gap: 7px; }
+      .metric-icon { width: 32px; height: 32px; }
+      .filters, .details-grid { grid-template-columns: 1fr 1fr; }
+      .detail-info div { grid-template-columns: 1fr; }
+      table { min-width: 520px; }
+    }
+    @media (max-width: 380px) {
+      .two-fields, .details-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Ir al contenido</a>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">A</span><div><strong>Comercial Aurora</strong><small>Atención al cliente</small></div></div>
+      <nav aria-label="Secciones">
+        <a href="#bandeja"><span class="nav-icon" aria-hidden="true">▤</span>Bandeja</a>
+        <a href="#radicacion"><span class="nav-icon" aria-hidden="true">＋</span>Nueva solicitud</a>
+        <a href="#datos"><span class="nav-icon" aria-hidden="true">⇅</span>Archivos JSON</a>
+      </nav>
+      <div class="sidebar-footer"><strong><span class="live-dot" aria-hidden="true"></span>Sesión local</strong><p>Descarga un respaldo para continuar tu trabajo cuando vuelvas a abrir el archivo.</p></div>
+    </aside>
+    <main id="main">
+      <header class="top">
+        <p class="top-label">Mesa de atención</p>
+        <div class="top-actions">
+          <span id="save-state" class="save-state" role="status"></span>
+          <button class="button" id="restore-button" type="button">Restaurar respaldo</button>
+          <button class="button" id="export-button" type="button">↓ Exportar respaldo</button>
+        </div>
+      </header>
+      <div class="page-heading">
+        <h1>Solicitudes de servicio</h1>
+        <p class="subtitle">Registra, asigna y da seguimiento a las solicitudes de tus clientes.</p>
+      </div>
+      <section class="metrics" aria-label="Resumen de solicitudes">
+        <div class="metric"><span class="metric-icon blue" aria-hidden="true">▤</span><div><strong id="count-total">0</strong><span>Total registradas</span></div></div>
+        <div class="metric"><span class="metric-icon green" aria-hidden="true">✓</span><div><strong id="count-ok">0</strong><span>En plazo</span></div></div>
+        <div class="metric"><span class="metric-icon amber" aria-hidden="true">◷</span><div><strong id="count-attention">0</strong><span>Atención · 24 h</span></div></div>
+        <div class="metric"><span class="metric-icon red" aria-hidden="true">!</span><div><strong id="count-late">0</strong><span>Vencidas · 48 h</span></div></div>
+      </section>
+      <div class="workspace">
+        <section class="card" id="radicacion" aria-labelledby="new-heading">
+          <div class="card-heading"><h2 id="new-heading">Nueva solicitud</h2><p class="subtitle">Captura manual de llamadas, mensajes y correos.</p></div>
+          <form class="form-body" id="ticket-form" novalidate>
+            <div class="field">
+              <label for="client-search">Buscar cliente <span aria-hidden="true">*</span></label>
+              <input id="client-search" type="search" placeholder="NIT o razón social" autocomplete="off">
+              <label class="sr-only" for="client">Selecciona un cliente</label>
+              <select id="client" name="client" required aria-describedby="client-error"></select>
+              <span id="client-error" class="field-error" hidden></span>
+            </div>
+            <div class="two-fields">
+              <div class="field">
+                <label for="channel">Canal <span aria-hidden="true">*</span></label>
+                <select id="channel" name="channel" required aria-describedby="channel-error"><option value="">Selecciona</option></select>
+                <span id="channel-error" class="field-error" hidden></span>
+              </div>
+              <div class="field">
+                <label for="type">Tipo <span aria-hidden="true">*</span></label>
+                <select id="type" name="type" required aria-describedby="type-error"><option value="">Selecciona</option></select>
+                <span id="type-error" class="field-error" hidden></span>
+              </div>
+            </div>
+            <div class="field"><label for="order">Referencia del pedido <span class="muted">(opcional)</span></label><input id="order" name="order" placeholder="Ej. PED-1042"></div>
+            <div class="field">
+              <label for="description">Descripción <span aria-hidden="true">*</span></label>
+              <textarea id="description" name="description" rows="3" required minlength="10" aria-describedby="description-hint description-error" placeholder="Describe lo que solicita el cliente"></textarea>
+              <span id="description-hint" class="muted">Mínimo 10 caracteres.</span>
+              <span id="description-error" class="field-error" hidden></span>
+            </div>
+            <button class="button primary full" type="submit">＋ Radicar solicitud</button>
+            <p class="form-foot muted">El agente se asigna automáticamente.</p>
+          </form>
+        </section>
+        <div class="right-column">
+          <section class="card" id="bandeja" aria-labelledby="queue-heading">
+            <div class="card-heading"><h2 id="queue-heading">Bandeja de solicitudes</h2><p class="subtitle">Busca un caso y abre su ticket para ver el historial.</p></div>
+            <div class="filters">
+              <input id="query" type="search" aria-label="Buscar solicitudes" placeholder="Ticket, NIT o razón social">
+              <select id="status-filter" aria-label="Filtrar por estado"><option value="">Todos los estados</option></select>
+              <select id="agent-filter" aria-label="Filtrar por agente"><option value="">Todos los agentes</option></select>
+              <select id="deadline-filter" aria-label="Filtrar por plazo">
+                <option value="">Todos los plazos</option><option value="ok">En plazo</option><option value="attention">Atención</option><option value="late">Vencida</option><option value="finished">Finalizada</option>
+              </select>
+            </div>
+            <div class="table-wrap" tabindex="0" role="region" aria-label="Tabla de solicitudes">
+              <table>
+                <thead><tr><th scope="col">Ticket / Recepción</th><th scope="col">Cliente</th><th scope="col">Agente</th><th scope="col">Estado</th><th scope="col">Plazo</th></tr></thead>
+                <tbody id="ticket-rows"></tbody>
+              </table>
+            </div>
+            <p class="empty" id="empty-queue" hidden>No hay solicitudes que coincidan con la búsqueda.</p>
+            <p class="table-footer muted" id="ticket-count"></p>
+          </section>
+          <section class="card" id="detalle" aria-labelledby="detail-heading">
+            <div class="card-heading"><h2 id="detail-heading" tabindex="-1">Detalle e historial</h2></div>
+            <p class="empty" id="detail-empty">Selecciona un ticket para consultar su detalle.</p>
+            <div class="details" id="detail-body" hidden>
+              <div class="details-grid">
+                <div><dl id="detail-info" class="detail-info"></dl><p id="detail-description" class="detail-description"></p></div>
+                <div><h3>Historial</h3><ol id="history" class="timeline"></ol></div>
+              </div>
+              <form id="transition-form" class="transition" novalidate>
+                <div class="two-fields">
+                  <div class="field"><label for="target-status">Nuevo estado</label><select id="target-status" aria-describedby="target-status-error"></select><span id="target-status-error" class="field-error" hidden></span></div>
+                  <div class="field"><label for="comment">Comentario o respuesta</label><textarea id="comment" rows="2" aria-describedby="comment-error"></textarea><span id="comment-error" class="field-error" hidden></span></div>
+                </div>
+                <button class="button primary" type="submit">Actualizar estado</button>
+              </form>
+            </div>
+          </section>
+          <section class="card data-card" id="datos" aria-labelledby="data-heading">
+            <div class="card-heading"><h2 id="data-heading">Directorio de clientes</h2><p class="subtitle" id="client-count"></p></div>
+            <div class="data-body">
+              <button class="button" id="directory-button" type="button">↑ Importar clientes JSON</button>
+              <details><summary>Ver ejemplo de directorio JSON</summary><pre id="directory-example"></pre><button class="button" id="example-button" type="button">Descargar ejemplo</button></details>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+  <input id="directory-file" type="file" accept=".json,application/json" hidden>
+  <input id="restore-file" type="file" accept=".json,application/json" hidden>
+  <dialog id="restore-dialog" aria-labelledby="restore-heading">
+    <h2 id="restore-heading">Restaurar la sesión</h2>
+    <p id="restore-summary"></p>
+    <form method="dialog">
+      <button class="button" value="cancel" autofocus>Cancelar</button>
+      <button class="button primary" value="restore">Reemplazar sesión</button>
+    </form>
+  </dialog>
+  <div class="notice" id="notice" role="status" aria-live="polite" hidden></div>
+  <script>
+    "use strict";
+
+    const HOUR = 3_600_000;
+    const ZONE = "America/Bogota";
+    const CHANNELS = {
+      Llamada_Telefonica: "Llamada",
+      Correo_Electronico: "Correo electrónico",
+      Mensajeria: "Mensajería"
+    };
+    const TYPES = {
+      Consulta_Stock: "Consulta de stock",
+      Estado_Pedido: "Estado de pedido",
+      Inconformidad_Envio: "Inconformidad de envío",
+      Facturacion_Cobro: "Facturación o cobro",
+      Devolucion: "Devolución"
+    };
+    const STATES = {
+      Nuevo: "Nuevo", En_Proceso: "En proceso", Pendiente_Logistica: "Pendiente logística",
+      Pendiente_Ventas: "Pendiente ventas", Resuelto: "Resuelto", Cerrado: "Cerrado"
+    };
+    const AGENTS = [
+      { id: "Agente_01", nombre: "Agente 01" }, { id: "Agente_02", nombre: "Agente 02" },
+      { id: "Agente_03", nombre: "Agente 03" }, { id: "Agente_04", nombre: "Agente 04" }
+    ];
+    const OPEN_TARGETS = ["En_Proceso", "Pendiente_Logistica", "Pendiente_Ventas", "Resuelto"];
+    const LEVELS = { ok: "En plazo", attention: "Atención", late: "Vencida" };
+    const EXAMPLE_CLIENTS = [
+      { nit: "901555020-1", razonSocial: "Oficinas Sendero (ficticio)" },
+      { nit: "901555021-9", razonSocial: "Colegio Nuevo Río (ficticio)" }
+    ];
+    const dateFormat = new Intl.DateTimeFormat("es-CO", { timeZone: ZONE, dateStyle: "short", timeStyle: "short" });
+    const monthFormat = new Intl.DateTimeFormat("en-GB", { timeZone: ZONE, year: "numeric", month: "2-digit" });
+    const numberFormat = new Intl.NumberFormat("es-CO", { maximumFractionDigits: 2 });
+    const get = (id) => document.getElementById(id);
+    const hasKey = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
+    const last = (items) => items[items.length - 1];
+
+    function monthOf(ms) {
+      const fields = Object.fromEntries(monthFormat.formatToParts(ms).map(({ type, value }) => [type, value]));
+      return fields.year + fields.month;
+    }
+
+    function elapsed(received, latest) {
+      return Math.max(0, latest - Date.parse(received)) / HOUR;
+    }
+
+    function deadline(ticket, now) {
+      if (ticket.fechaResolucion !== null) {
+        return { level: "finished", label: ticket.cumplePlazo ? "Resuelta en plazo" : "Resuelta fuera de plazo", hours: ticket.horasAtencion };
+      }
+      const hours = elapsed(ticket.fechaRecepcion, now);
+      const level = hours >= 48 ? "late" : hours >= 24 ? "attention" : "ok";
+      return { level, label: LEVELS[level], hours };
+    }
+
+    function allowedTransition(from, to) {
+      if (from === "Cerrado" || from === to) return false;
+      return from === "Resuelto" ? to === "Cerrado" : OPEN_TARGETS.includes(to);
+    }
+
+    function nextTicketId(session, now) {
+      const month = monthOf(now);
+      const number = (session.consecutivos[month] ?? 0) + 1;
+      if (number > 9999) return null;
+      return { month, number, id: "AUR-" + month + "-" + String(number).padStart(4, "0") };
+    }
+
+    function registerTicket(session, data, now) {
+      const sequence = nextTicketId(session, now);
+      if (!sequence) return null;
+      const fechaRecepcion = new Date(now).toISOString();
+      const ticket = {
+        ...data, id: sequence.id, fechaRecepcion, agenteId: session.agentes[session.turno].id,
+        estado: "Nuevo", fechaResolucion: null, horasAtencion: null, cumplePlazo: null
+      };
+      session.solicitudes.push(ticket);
+      session.historial.push({
+        id: ticket.id + "-1", ticketId: ticket.id, fecha: fechaRecepcion,
+        anterior: null, nuevo: "Nuevo", comentario: ""
+      });
+      session.consecutivos[sequence.month] = sequence.number;
+      session.turno = (session.turno + 1) % session.agentes.length;
+      return ticket;
+    }
+
+    function changeStatus(session, ticket, target, comment, now) {
+      const events = session.historial.filter((event) => event.ticketId === ticket.id);
+      const instant = Math.max(now, Date.parse(last(events).fecha));
+      const fecha = new Date(instant).toISOString();
+      session.historial.push({
+        id: ticket.id + "-" + (events.length + 1), ticketId: ticket.id, fecha,
+        anterior: ticket.estado, nuevo: target, comentario: comment
+      });
+      ticket.estado = target;
+      if (target === "Resuelto") {
+        ticket.fechaResolucion = fecha;
+        ticket.horasAtencion = elapsed(ticket.fechaRecepcion, instant);
+        ticket.cumplePlazo = ticket.horasAtencion <= 48;
+      }
+    }
+
+    function initialSession(now) {
+      const clientes = [
+        { nit: "901555001-5", razonSocial: "Distribuciones Andina" },
+        { nit: "901555002-3", razonSocial: "Colegio Horizonte" },
+        { nit: "901555003-1", razonSocial: "Papelería La Estación" },
+        { nit: "901555004-9", razonSocial: "Fundación Los Pinos" },
+        { nit: "901555005-7", razonSocial: "Consultores del Valle" },
+        { nit: "901555006-5", razonSocial: "Instituto Nuevo Sol" }
+      ];
+      const session = {
+        version: 1, clientes, agentes: AGENTS.map((agent) => ({ ...agent })),
+        solicitudes: [], historial: [], consecutivos: {}, turno: 0
+      };
+      const demo = [
+        [60, 3, "Mensajeria", "Inconformidad_Envio", "El cliente reporta unidades faltantes en la entrega.", "Pendiente_Logistica", "Se solicitó confirmación de inventario."],
+        [53, 4, "Llamada_Telefonica", "Devolucion", "El cliente solicita recoger una caja con referencias equivocadas.", "Pendiente_Ventas", "Se solicitó autorización para la devolución."],
+        [42, 5, "Correo_Electronico", "Facturacion_Cobro", "Solicita una copia de la factura con el detalle del pedido.", "Resuelto", "Se envió una copia de la factura al correo de contacto."],
+        [29, 2, "Correo_Electronico", "Estado_Pedido", "La papelería solicita confirmar la fecha estimada de entrega.", "En_Proceso", "Se está verificando el despacho."],
+        [17, 1, "Mensajeria", "Consulta_Stock", "El colegio consulta disponibilidad de resmas y marcadores.", "En_Proceso", "Se revisa el inventario disponible."],
+        [3, 0, "Llamada_Telefonica", "Estado_Pedido", "Solicita confirmar la entrega del pedido de insumos de oficina.", null, ""]
+      ];
+      for (const [hours, clientIndex, canal, tipo, descripcion, target, comment] of demo) {
+        const client = clientes[clientIndex];
+        const received = now - hours * HOUR;
+        const ticket = registerTicket(session, {
+          clienteNit: client.nit, clienteNombre: client.razonSocial, canal, tipo, descripcion, pedido: ""
+        }, received);
+        if (target) changeStatus(session, ticket, target, comment, received + HOUR);
+      }
+      return session;
+    }
+
+    let session = initialSession(Date.now());
+    let selectedId = last(session.solicitudes).id;
+    let dirty = false;
+    let lastBackup = "Datos de demostración";
+    let pendingRestore = null;
+    let fileBusy = false;
+    let noticeTimer;
+    let renderedQueue = [];
+
+    function showNotice(message, error = false) {
+      const notice = get("notice");
+      clearTimeout(noticeTimer);
+      notice.textContent = message;
+      notice.dataset.error = error;
+      notice.hidden = false;
+      noticeTimer = setTimeout(() => { notice.hidden = true; }, error ? 9000 : 5500);
+    }
+
+    function updateSaveState() {
+      get("save-state").dataset.dirty = dirty;
+      get("save-state").textContent = dirty ? "Cambios sin exportar" : lastBackup;
+    }
+
+    function markDirty() {
+      dirty = true;
+      updateSaveState();
+    }
+
+    function searchKey(value) {
+      return value.normalize("NFD").replace(/\p{Diacritic}/gu, "").trim().toLocaleLowerCase("es-CO");
+    }
+
+    function matches(query, ...values) {
+      return values.some((value) => searchKey(value).includes(query));
+    }
+
+    function addOption(select, value, title) {
+      select.add(new Option(title, value));
+    }
+
+    function populateSelect(id, values) {
+      const select = get(id);
+      for (const [value, title] of Object.entries(values)) addOption(select, value, title);
+    }
+
+    function setChildren(node, children = []) {
+      const fragment = document.createDocumentFragment();
+      for (const child of children) fragment.appendChild(child);
+      node.textContent = "";
+      node.appendChild(fragment);
+    }
+
+    function renderClients() {
+      const select = get("client");
+      const previous = select.value;
+      setChildren(select);
+      addOption(select, "", "Selecciona un cliente");
+      const query = searchKey(get("client-search").value);
+      let count = 0;
+      for (const client of session.clientes) {
+        if (!matches(query, client.nit, client.razonSocial)) continue;
+        addOption(select, client.nit, client.razonSocial + " · " + client.nit);
+        count += 1;
+      }
+      select.value = Array.from(select.options).some((option) => option.value === previous) ? previous : "";
+      if (!count) select.options[0].textContent = "Sin coincidencias";
+      get("client-count").textContent = session.clientes.length + " clientes disponibles para radicar solicitudes.";
+    }
+
+    function renderAgents() {
+      const select = get("agent-filter");
+      const previous = select.value;
+      setChildren(select, [new Option("Todos los agentes", "")]);
+      for (const agent of session.agentes) addOption(select, agent.id, agent.nombre);
+      if (session.agentes.some(({ id }) => id === previous)) select.value = previous;
+    }
+
+    function agentName(id) {
+      return session.agentes.find((agent) => agent.id === id).nombre;
+    }
+
+    function fieldError(id, message = "") {
+      const input = get(id);
+      const error = get(id + "-error");
+      if (message) input.setAttribute("aria-invalid", "true");
+      else input.removeAttribute("aria-invalid");
+      error.textContent = message;
+      error.hidden = !message;
+    }
+
+    function formIsValid(errors) {
+      for (const [id, message] of Object.entries(errors)) fieldError(id, message);
+      const first = Object.keys(errors).find((id) => errors[id]);
+      if (first) get(first).focus();
+      return !first;
+    }
+
+    function element(tag, className, value) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (value !== undefined) node.textContent = value;
+      return node;
+    }
+
+    function displayDate(value) {
+      return dateFormat.format(new Date(value));
+    }
+
+    function renderQueue(force = true, now = Date.now()) {
+      const query = searchKey(get("query").value);
+      const state = get("status-filter").value;
+      const agent = get("agent-filter").value;
+      const level = get("deadline-filter").value;
+      const totals = { ok: 0, attention: 0, late: 0, finished: 0 };
+      const filtered = [];
+      for (const ticket of [...session.solicitudes].reverse()) {
+        const timing = deadline(ticket, now);
+        totals[timing.level] += 1;
+        if (state && ticket.estado !== state || agent && ticket.agenteId !== agent || level && timing.level !== level) continue;
+        if (matches(query, ticket.id, ticket.clienteNit, ticket.clienteNombre)) filtered.push({ ticket, timing });
+      }
+      const queueKey = filtered.map(({ ticket, timing }) => ticket.id + timing.level);
+      if (!force && queueKey.length === renderedQueue.length && queueKey.every((value, index) => value === renderedQueue[index])) {
+        if (get("count-ok").textContent === String(totals.ok) &&
+            get("count-attention").textContent === String(totals.attention) &&
+            get("count-late").textContent === String(totals.late)) return;
+      }
+      renderedQueue = queueKey;
+      get("count-total").textContent = session.solicitudes.length;
+      get("count-ok").textContent = totals.ok;
+      get("count-attention").textContent = totals.attention;
+      get("count-late").textContent = totals.late;
+      get("empty-queue").hidden = filtered.length > 0;
+      get("ticket-count").textContent = filtered.length + " de " + session.solicitudes.length + " solicitudes";
+      const focusedTicket = document.activeElement?.dataset.ticketId;
+      const tbody = get("ticket-rows");
+      setChildren(tbody, filtered.map(({ ticket, timing }) => {
+        const row = element("tr");
+        const selected = ticket.id === selectedId;
+        row.dataset.selected = selected;
+        const idCell = element("td");
+        const button = element("button", "ticket-link", ticket.id);
+        button.type = "button";
+        button.dataset.ticketId = ticket.id;
+        button.setAttribute("aria-controls", "detalle");
+        if (selected) button.setAttribute("aria-current", "true");
+        idCell.append(button, element("span", "muted", displayDate(ticket.fechaRecepcion)));
+        const customer = element("td", "customer", ticket.clienteNombre);
+        customer.append(element("span", "muted", ticket.clienteNit));
+        const stateCell = element("td");
+        stateCell.append(element("span", "badge", STATES[ticket.estado]));
+        const timingCell = element("td");
+        const badge = element("span", "badge", timing.label);
+        badge.dataset.level = timing.level;
+        timingCell.append(badge);
+        row.append(idCell, customer, element("td", "assignee", agentName(ticket.agenteId)), stateCell, timingCell);
+        return row;
+      }));
+      if (focusedTicket) {
+        const replacement = Array.from(tbody.querySelectorAll("button")).find((button) => button.dataset.ticketId === focusedTicket);
+        (replacement ?? get("query")).focus({ preventScroll: true });
+      }
+    }
+
+    function currentTicket() {
+      return session.solicitudes.find((ticket) => ticket.id === selectedId);
+    }
+
+    function detailField(label, value, id) {
+      const row = element("div");
+      const data = element("dd", "", value);
+      if (id) data.id = id;
+      row.append(element("dt", "", label), data);
+      return row;
+    }
+
+    function renderDetailDeadline(now = Date.now()) {
+      const ticket = currentTicket();
+      const target = get("detail-deadline");
+      if (!ticket || !target) return;
+      const timing = deadline(ticket, now);
+      target.textContent = timing.label + " · " + numberFormat.format(timing.hours) + " h";
+    }
+
+    function renderDetail() {
+      const ticket = currentTicket();
+      get("detail-empty").hidden = Boolean(ticket);
+      get("detail-body").hidden = !ticket;
+      get("detail-heading").textContent = ticket ? ticket.id : "Detalle e historial";
+      if (!ticket) return;
+      const info = get("detail-info");
+      setChildren(info, [
+        detailField("Cliente", ticket.clienteNombre + " · " + ticket.clienteNit),
+        detailField("Recepción", displayDate(ticket.fechaRecepcion) + " (Bogotá)"),
+        detailField("Canal", CHANNELS[ticket.canal]),
+        detailField("Tipo", TYPES[ticket.tipo]),
+        detailField("Agente", agentName(ticket.agenteId)),
+        detailField("Estado", STATES[ticket.estado]),
+        detailField("Plazo", "", "detail-deadline")
+      ]);
+      if (ticket.pedido) info.append(detailField("Pedido", ticket.pedido));
+      if (ticket.fechaResolucion) info.append(detailField("Resolución", displayDate(ticket.fechaResolucion) + " (Bogotá)"));
+      renderDetailDeadline();
+      get("detail-description").textContent = ticket.descripcion;
+      setChildren(get("history"), session.historial.filter((event) => event.ticketId === ticket.id).map((event) => {
+        const item = element("li");
+        const name = event.anterior === null ? "Radicación · Nuevo" : STATES[event.anterior] + " → " + STATES[event.nuevo];
+        const timestamp = element("time", "muted", displayDate(event.fecha) + " (Bogotá)");
+        timestamp.dateTime = event.fecha;
+        item.append(element("strong", "", name), element("p"));
+        item.lastChild.append(timestamp);
+        if (event.comentario) item.append(element("p", "", event.comentario));
+        return item;
+      }));
+      const select = get("target-status");
+      setChildren(select, [new Option("Selecciona un estado", "")]);
+      const targets = Object.keys(STATES).filter((state) => allowedTransition(ticket.estado, state));
+      for (const state of targets) addOption(select, state, STATES[state]);
+      get("transition-form").hidden = targets.length === 0;
+      get("comment").value = "";
+      fieldError("target-status");
+      fieldError("comment");
+    }
+
+    get("ticket-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const client = session.clientes.find(({ nit }) => nit === get("client").value);
+      const canal = get("channel").value;
+      const tipo = get("type").value;
+      const descripcion = get("description").value.trim();
+      const valid = formIsValid({
+        client: client ? "" : "Selecciona un cliente del directorio.",
+        channel: hasKey(CHANNELS, canal) ? "" : "Selecciona un canal.",
+        type: hasKey(TYPES, tipo) ? "" : "Selecciona un tipo.",
+        description: descripcion.length >= 10 ? "" : "Escribe al menos 10 caracteres."
+      });
+      if (!valid) return;
+      const ticket = registerTicket(session, {
+        clienteNit: client.nit, clienteNombre: client.razonSocial, canal, tipo, descripcion, pedido: get("order").value.trim()
+      }, Date.now());
+      if (!ticket) {
+        showNotice("Se alcanzó el límite de 9.999 tickets para este mes. Los datos se conservaron.", true);
+        return;
+      }
+      event.currentTarget.reset();
+      renderClients();
+      selectedId = ticket.id;
+      renderQueue();
+      renderDetail();
+      markDirty();
+      showNotice("Solicitud " + ticket.id + " radicada y asignada a " + agentName(ticket.agenteId) + ".");
+    });
+
+    get("transition-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const ticket = currentTicket();
+      const target = get("target-status").value;
+      const comment = get("comment").value.trim();
+      if (!ticket) return;
+      const valid = formIsValid({
+        "target-status": allowedTransition(ticket.estado, target) ? "" :
+          target === "Cerrado" ? "Resuelve la solicitud antes de cerrarla." : "Selecciona un cambio de estado válido.",
+        comment: target === "Resuelto" && !comment ? "Escribe la respuesta antes de resolver." : ""
+      });
+      if (!valid) return;
+      changeStatus(session, ticket, target, comment, Date.now());
+      markDirty();
+      renderQueue();
+      renderDetail();
+      get("detail-heading").focus({ preventScroll: true });
+      showNotice("Estado actualizado a " + STATES[target] + ".");
+    });
+
+    get("ticket-rows").addEventListener("click", (event) => {
+      const trigger = event.target.closest("button[data-ticket-id]");
+      if (!trigger) return;
+      selectedId = trigger.dataset.ticketId;
+      renderQueue();
+      renderDetail();
+      get("detail-heading").focus({ preventScroll: true });
+      get("detalle").scrollIntoView({ block: "nearest" });
+    });
+
+    for (const id of ["query", "status-filter", "agent-filter", "deadline-filter"]) {
+      get(id).addEventListener(id === "query" ? "input" : "change", () => renderQueue());
+    }
+    get("client-search").addEventListener("input", renderClients);
+
+    function refreshClock() {
+      const now = Date.now();
+      renderQueue(false, now);
+      renderDetailDeadline(now);
+    }
+    window.addEventListener("focus", refreshClock);
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshClock(); });
+    setInterval(refreshClock, 1000);
+
+    function hasText(value) {
+      return typeof value === "string" && value.trim().length > 0;
+    }
+
+    function normalizeDirectory(data) {
+      if (!Array.isArray(data)) throw new Error("El directorio debe ser un arreglo JSON de clientes.");
+      const seen = new Set();
+      return data.map((entry, index) => {
+        if (!hasText(entry?.nit) || !hasText(entry?.razonSocial)) {
+          throw new Error("El cliente " + (index + 1) + " debe tener nit y razonSocial como textos.");
+        }
+        const nit = entry.nit.trim();
+        if (seen.has(nit)) throw new Error("El archivo repite el NIT " + nit + ".");
+        seen.add(nit);
+        return { nit, razonSocial: entry.razonSocial.trim() };
+      });
+    }
+
+    function validInstant(value) {
+      if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(value)) return false;
+      const timestamp = Date.parse(value);
+      return Number.isFinite(timestamp) && new Date(timestamp).toISOString() === value;
+    }
+
+    function requireBackup(condition, reason) {
+      if (!condition) throw new Error("El respaldo no se puede restaurar. " + reason);
+    }
+
+    function validateCounters(consecutivos) {
+      requireBackup(consecutivos && typeof consecutivos === "object" && !Array.isArray(consecutivos),
+        "Faltan los consecutivos mensuales.");
+      for (const [month, number] of Object.entries(consecutivos)) {
+        requireBackup(/^\d{4}(0[1-9]|1[0-2])$/.test(month) && Number.isInteger(number) && number >= 1 && number <= 9999,
+          "Hay un consecutivo mensual inválido.");
+      }
+    }
+
+    function validateTickets(data, clients, agents) {
+      const tickets = new Map();
+      for (const ticket of data.solicitudes) {
+        const columns = typeof ticket?.id === "string" && /^AUR-(\d{6})-(\d{4})$/.exec(ticket.id);
+        requireBackup(columns && !tickets.has(ticket.id) && validInstant(ticket.fechaRecepcion), "Hay un ticket o una fecha de recepción inválidos.");
+        const [, month, serial] = columns;
+        requireBackup(month === monthOf(Date.parse(ticket.fechaRecepcion)) && Number(serial) > 0 &&
+          Number(serial) <= data.consecutivos[month], "La numeración de un ticket no coincide con los consecutivos guardados.");
+        requireBackup(clients.has(ticket.clienteNit) && hasText(ticket.clienteNombre) && agents.has(ticket.agenteId),
+          "Un ticket hace referencia a un cliente o agente desconocido.");
+        requireBackup(hasKey(CHANNELS, ticket.canal) && hasKey(TYPES, ticket.tipo) &&
+          hasKey(STATES, ticket.estado) && typeof ticket.pedido === "string" &&
+          typeof ticket.descripcion === "string" && ticket.descripcion.trim().length >= 10, "Hay una solicitud con campos inválidos.");
+        if (ticket.estado === "Resuelto" || ticket.estado === "Cerrado") {
+          const resolution = Date.parse(ticket.fechaResolucion);
+          const expectedHours = elapsed(ticket.fechaRecepcion, resolution);
+          requireBackup(validInstant(ticket.fechaResolucion) && resolution >= Date.parse(ticket.fechaRecepcion) &&
+            ticket.horasAtencion === expectedHours && ticket.cumplePlazo === (expectedHours <= 48),
+            "Una resolución no coincide con el cálculo del plazo.");
+        } else {
+          requireBackup(ticket.fechaResolucion === null && ticket.horasAtencion === null && ticket.cumplePlazo === null,
+            "Una solicitud abierta contiene datos de resolución.");
+        }
+        tickets.set(ticket.id, ticket);
+      }
+      return tickets;
+    }
+
+    function validateHistory(events, tickets) {
+      const histories = new Map();
+      for (const event of events) {
+        const ticket = tickets.get(event?.ticketId);
+        requireBackup(ticket && typeof event.comentario === "string" && validInstant(event.fecha),
+          "Hay un evento de historial inválido.");
+        const record = histories.get(ticket.id) ?? { count: 0, last: null, resolution: null };
+        const last = record.last;
+        requireBackup(event.id === ticket.id + "-" + (record.count + 1), "Hay un identificador de evento inválido o repetido.");
+        if (!last) {
+          requireBackup(event.anterior === null && event.nuevo === "Nuevo" && event.fecha === ticket.fechaRecepcion,
+            "Un historial no empieza con la radicación de su ticket.");
+        } else {
+          requireBackup(event.anterior === last.nuevo && allowedTransition(last.nuevo, event.nuevo) &&
+            Date.parse(event.fecha) >= Date.parse(last.fecha), "Un cambio de estado del historial es inconsistente.");
+        }
+        if (event.nuevo === "Resuelto") {
+          requireBackup(hasText(event.comentario), "Falta la respuesta de un caso resuelto.");
+          record.resolution = event.fecha;
+        }
+        record.count += 1;
+        record.last = event;
+        histories.set(ticket.id, record);
+      }
+      for (const [id, ticket] of tickets) {
+        const record = histories.get(id);
+        requireBackup(record && record.last.nuevo === ticket.estado && record.resolution === ticket.fechaResolucion,
+          "El historial no coincide con el estado o la resolución de un ticket.");
+      }
+    }
+
+    function validateBackup(data) {
+      requireBackup(data?.version === 1 && Array.isArray(data.agentes) && Array.isArray(data.solicitudes) &&
+        Array.isArray(data.historial), "El formato o la versión no es compatible.");
+      requireBackup(data.agentes.length === AGENTS.length && data.agentes.every((agent, index) =>
+        agent?.id === AGENTS[index].id && hasText(agent.nombre)), "La lista de agentes es inválida.");
+      requireBackup(Number.isInteger(data.turno) && data.turno >= 0 && data.turno < AGENTS.length,
+        "El turno de asignación es inválido.");
+      const clients = normalizeDirectory(data.clientes);
+      validateCounters(data.consecutivos);
+      const tickets = validateTickets(data, new Set(clients.map(({ nit }) => nit)), new Set(AGENTS.map(({ id }) => id)));
+      validateHistory(data.historial, tickets);
+      return {
+        version: data.version, clientes: clients, agentes: data.agentes, solicitudes: data.solicitudes,
+        historial: data.historial, consecutivos: data.consecutivos, turno: data.turno
+      };
+    }
+
+    async function readJson(input) {
+      const file = input.files[0];
+      input.value = "";
+      if (!file) return null;
+      const content = await file.text();
+      try {
+        return { data: JSON.parse(content.replace(/^\uFEFF/, "")) };
+      } catch {
+        throw new Error("El archivo seleccionado no contiene JSON válido.");
+      }
+    }
+
+    function startRead(inputId, apply) {
+      get(inputId).addEventListener("change", async (event) => {
+        if (fileBusy) return;
+        fileBusy = true;
+        try {
+          const result = await readJson(event.currentTarget);
+          if (result) apply(result.data);
+        } catch (error) {
+          showNotice(error.message, true);
+        } finally {
+          fileBusy = false;
+        }
+      });
+    }
+
+    function importDirectory(data) {
+      const normalized = normalizeDirectory(data);
+      const merged = new Map(session.clientes.map((client) => [client.nit, client]));
+      let added = 0;
+      let updated = 0;
+      for (const client of normalized) {
+        const previous = merged.get(client.nit);
+        if (!previous) added += 1;
+        else if (previous.razonSocial !== client.razonSocial) updated += 1;
+        merged.set(client.nit, client);
+      }
+      if (added || updated) {
+        session.clientes = Array.from(merged.values());
+        renderClients();
+        markDirty();
+      }
+      showNotice("Directorio procesado. Nuevos: " + added + ". Actualizados: " + updated + ".");
+    }
+
+    function downloadJson(data, name) {
+      const blob = new Blob([JSON.stringify(data, null, 2) + "\n"], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = element("a");
+      link.href = url;
+      link.download = name;
+      link.hidden = true;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    get("directory-button").addEventListener("click", () => get("directory-file").click());
+    get("restore-button").addEventListener("click", () => get("restore-file").click());
+    get("example-button").addEventListener("click", () => downloadJson(EXAMPLE_CLIENTS, "aurora-clientes-ejemplo.json"));
+    get("export-button").addEventListener("click", () => {
+      downloadJson(session, "aurora-respaldo-" + new Date().toISOString().slice(0, 10) + ".json");
+      dirty = false;
+      lastBackup = "Respaldo exportado";
+      updateSaveState();
+      showNotice("Se inició la descarga del respaldo JSON.");
+    });
+    startRead("directory-file", importDirectory);
+
+    const restoreDialog = get("restore-dialog");
+    startRead("restore-file", (data) => {
+      pendingRestore = validateBackup(data);
+      restoreDialog.returnValue = "";
+      get("restore-summary").textContent = "El respaldo contiene " + pendingRestore.solicitudes.length +
+        " solicitudes y " + pendingRestore.clientes.length + " clientes. Al confirmar, reemplazará los datos de esta sesión." +
+        (dirty ? " Tienes cambios pendientes de exportar." : "");
+      restoreDialog.showModal();
+    });
+
+    restoreDialog.addEventListener("close", () => {
+      if (restoreDialog.returnValue === "restore" && pendingRestore) {
+        session = pendingRestore;
+        selectedId = last(session.solicitudes)?.id ?? null;
+        get("ticket-form").reset();
+        for (const id of ["client", "channel", "type", "description"]) fieldError(id);
+        for (const id of ["query", "status-filter", "agent-filter", "deadline-filter"]) get(id).value = "";
+        renderClients();
+        renderAgents();
+        renderQueue();
+        renderDetail();
+        dirty = false;
+        lastBackup = "Respaldo restaurado";
+        updateSaveState();
+        showNotice("Sesión restaurada desde el respaldo.");
+      }
+      pendingRestore = null;
+    });
+
+    populateSelect("channel", CHANNELS);
+    populateSelect("type", TYPES);
+    populateSelect("status-filter", STATES);
+    get("directory-example").textContent = JSON.stringify(EXAMPLE_CLIENTS, null, 2);
+    renderClients();
+    renderAgents();
+    renderQueue();
+    renderDetail();
+    updateSaveState();
+  </script>
+</body>
+</html>
